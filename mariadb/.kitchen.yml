@@ -1,0 +1,24 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: centos-latest
+
+suites:
+  - name: default
+    run_list:
+      - recipe[mariadb::server]
+    attributes:
+      #      mariadb:
+      #  server:
+      #    root_password: "test"
+
+driver_config:
+  hostname: mariadb.box
+  dockerfile: Dockerfile
+  run_command: /sbin/init
+  privileged: true
