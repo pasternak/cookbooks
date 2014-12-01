@@ -1,6 +1,6 @@
 # Default version of MariaDB to install
 # Can be overwritten in role/env/node
-default[:mariadb][:server][:version] = "10.0"
+default[:mariadb][:server][:version] = "5.5"
 
 # Secure install
 default[:mariadb][:server][:remove][:test_db] = true
