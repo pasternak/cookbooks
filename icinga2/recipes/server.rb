@@ -14,6 +14,10 @@
 
 =end
 
+# Use internal libraries
+class Chef::Recipe
+  include Icinga2::Object
+end
 
 # Install Icinga2 repository
 case node[:platform]
@@ -52,9 +56,50 @@ when :mysql
   end
 end
 
+# Prepare Client configuration
+%w( host_groups boxes service_groups ).each { |e| directory "/etc/icinga2/conf.d/custom.d/#{e}" do recursive true end }
+custom_d = "/etc/icinga2/conf.d/custom.d"
+
+# Get list of boxes controlled by Icinga and running recipe icinga2::client
+search(:node, 'recipes:icinga2\:\:client').each do |box|
+  # Look for hostgroup definition. If not found, create hostgroup file 
+  if !obj_query(:hostgroup, box[:icinga2][:client][:host_group][:short])
+
+    template "#{custom_d}/host_groups/#{box[:icinga2][:client][:host_group][:short]}.conf" do
+      source "HostGroup.conf.erb"
+      variables({
+        :name => box[:icinga2][:client][:host_group][:short],
+        :desc => box[:icinga2][:client][:host_group][:desc]
+      })
+      notifies :reload, "service[icinga2]", :delayed
+    end
+
+  end if !box[:icinga2][:client][:host_group][:short].nil?
+
+  template "#{custom_d}/boxes/#{box[:fqdn]}.conf" do
+    source "HostDefinition.conf.erb"
+    variables({
+      :box => box[:icinga2][:client][:nrpe][:default]
+    })
+    notifies :reload, "service[icinga2]", :delayed
+    not_if { box[:fqdn].empty? }
+  end
+
+end
+
+# Clear icinga2 from hosts deleted from Chef's DB
+ruby_block ":: Clearing not used boxes..." do
+  block do
+    Dir.glob("#{custom_d}/boxes/*.conf").each do |file|
+      ::FileUtils.rm(file) if search(:node, "fqdn:#{::File.basename(file, '.conf')}").empty?
+    end
+  end
+end
+
 # Finally, start icinga2 service
 service "icinga2" do
   supports :status => true, :restart => true, :reload => true
   action  [ :enable, :start ]
 end
+
 

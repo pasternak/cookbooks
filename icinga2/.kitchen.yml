@@ -13,7 +13,9 @@ suites:
     run_list:
       - recipe[mariadb::server]
       - recipe[icinga2]
-    attributes:
+      - recipe[icinga2::client]
+    attributes: 
+#{ icinga2: { client: { host_group: { short: , desc: "Some desc" } } } }
 
 driver_config:
   forward:

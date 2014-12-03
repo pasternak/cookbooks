@@ -89,6 +89,11 @@ when :mysql
   end
 end
 
+# Set icinga2.cmd path
+execute "Configure icinga2.cmd" do
+  command "find -L /etc/icingaweb -type f -exec sed -i -e 's;/usr/local/icinga/var/rw/icinga.cmd;/var/run/icinga2/cmd/icinga2.cmd;g' {} \\;"
+end
+
 # Monitor IcingaWeb instance itself
 ruby_block "Configure icingaweb2 monitoring" do
   block do
