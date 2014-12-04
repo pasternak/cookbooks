@@ -5,3 +5,11 @@ default[:icinga2][:backend][:mysql][:user]  = "icinga"
 default[:icinga2][:backend][:mysql][:password] = "icinga"
 
 
+# Notifications: user and group definitions
+#
+default[:icinga2][:notification][:groups] = ["icingaadmins"]
+
+default[:icinga2][:notification][:users] = {
+                                            "icingaadmin" => { :mail => "icinga@localhost", :display => "Icinga 2 Default Admin", :groups => ["icingaadmins"] }
+}
+

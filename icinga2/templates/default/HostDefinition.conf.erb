@@ -1,9 +1,12 @@
-object Host "<%= node[:fqdn] %>" {
+object Host "<%= node[:fqdn] %>-test" {
   import "generic-host"
   address = "<%= node[:ipaddress] %>"
   vars.os = "<%= node[:os].capitalize %>"
   vars.managed_by = "chef"
   vars.os_family = "<%= node[:platform].capitalize %>"
+
+  # Notification group
+  vars.notification.mail.groups = <%= node[:icinga2][:notification][:groups].to_a %>
 
   <% if !node[:icinga2][:client][:host_group][:short].nil? -%>
   vars.box = "<%= node[:icinga2][:client][:host_group][:short] %>"
@@ -13,7 +16,7 @@ object Host "<%= node[:fqdn] %>" {
 
 <% @box.each_key do |check| -%>
 object Service "<%= check.gsub("_", " ").split.map(&:capitalize)[1..-1].join(" ") %>" {
-  host_name = "<%= node[:fqdn] %>"
+  host_name = "<%= node[:fqdn] %>-test"
   check_command = "nrpe"
   vars.nrpe_command = "<%= check %>"
 }

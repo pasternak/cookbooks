@@ -87,6 +87,28 @@ search(:node, 'recipes:icinga2\:\:client').each do |box|
 
 end
 
+# Configure users and notifications
+template "/etc/icinga2/conf.d/users.conf" do
+  source "users.conf.erb"
+  variables({
+    :users => node[:icinga2][:notification][:users]
+  })
+  notifies :reload, "service[icinga2]", :delayed
+end
+
+# Setup user's group
+groups = Array.new
+node[:icinga2][:notification][:users].each_key do |user|
+  node[:icinga2][:notification][:users][user][:groups].each { |group| groups << group if !groups.include?(group) }
+end
+template "/etc/icinga2/conf.d/users-groups.conf" do
+  source "users-groups.conf.erb"
+  variables({
+    :groups => groups
+  })
+  notifies :reload, "service[icinga2]", :delayed
+end
+
 # Clear icinga2 from hosts deleted from Chef's DB
 ruby_block ":: Clearing not used boxes..." do
   block do
