@@ -10,3 +10,8 @@ yum_repository "mariadb" do
   action  :nothing
 end.run_action :create
 
+# DO not user mariadb-libs
+node.default[:yum][:main][:exclude] = "mariadb-libs"
+
+include_recipe "yum"
+
