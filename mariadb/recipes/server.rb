@@ -16,7 +16,7 @@ end
 # Required for MariaDB LWRP
 # Include this recipe in every cookbook you want to use this resources
 #
-%w(gcc make ruby-devel mariadb-devel).each do |pkg|
+%w(gcc make ruby-devel MariaDB-devel MariaDB-compat).each do |pkg|
   package pkg do
     action  :nothing
   end.run_action :install
@@ -27,12 +27,12 @@ chef_gem "mysql2" do
 end.run_action(:install)
 
 # Install server package
-package "mariadb-server" do
+package "MariaDB-server" do
   action :install
 end
 
 # Start server [mysql if installed from mariadb repo/mariadb if from centos/rhel]
-service "mariadb" do
+service "mysql" do
   action  :start
 end
 
