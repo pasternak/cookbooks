@@ -5,4 +5,4 @@ yum_repository "icinga-stable-release" do
   action  :create
 end
 
-%w( epel-release nagios-plugins-all ).each { |e| package e }
+%w( epel-release nagios-plugins-all nagios-plugins-nrpe ).each { |e| package e }

@@ -79,7 +79,7 @@ search(:node, 'recipes:icinga2\:\:client').each do |box|
   template "#{custom_d}/boxes/#{box[:fqdn]}.conf" do
     source "HostDefinition.conf.erb"
     variables({
-      :box => box[:icinga2][:client][:nrpe][:default]
+      :box => box
     })
     notifies :reload, "service[icinga2]", :delayed
     not_if { box[:fqdn].empty? }
