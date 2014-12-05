@@ -97,7 +97,7 @@ template "/etc/icinga2/conf.d/users.conf" do
 end
 
 # Setup user's group
-groups = Array.new
+groups = Array.new(["icingaadmins"])
 node[:icinga2][:notification][:users].each_key do |user|
   node[:icinga2][:notification][:users][user][:groups].each { |group| groups << group if !groups.include?(group) }
 end
