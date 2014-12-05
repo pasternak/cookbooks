@@ -10,6 +10,7 @@ default[:icinga2][:backend][:mysql][:password] = "icinga"
 default[:icinga2][:notification][:groups] = ["icingaadmins"]
 
 default[:icinga2][:notification][:users] = {
-                                            "icingaadmin" => { :mail => "icinga@localhost", :display => "Icinga 2 Default Admin", :groups => ["icingaadmins"] }
+                                            # Override this attribute in role/env
+                                            #"icingaadmin" => { :mail => "icinga@localhost", :display => "Icinga 2 Default Admin", :groups => ["icingaadmins"] }
 }
 

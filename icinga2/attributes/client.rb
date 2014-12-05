@@ -23,3 +23,6 @@ default[:icinga2][:client][:remote][:default] = %w( ssh ping4 ping6 )
 # Default icinga server
 # Used for allowed_hosts. Others server will be built out from 'node search' query
 default[:icinga2][:client][:allowed_hosts] = %w()
+
+# Allow remote command's arguments
+default[:icinga2][:client][:dont_blame_nrpe] = 1
