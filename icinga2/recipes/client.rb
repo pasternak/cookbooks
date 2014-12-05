@@ -3,7 +3,7 @@
 template "/etc/nagios/nrpe.cfg" do
   source "nrpe.cfg.erb"
   variables({
-    :icinga_server => search(:node, 'recipes:icinga2\:\:server').map! { |e| "#{e[:ipaddress]}" }.join(',')
+    :icinga_server => (search(:node, 'recipes:icinga2\:\:server').map! { |e| "#{e[:ipaddress]}" }.concat(node[:icinga2][:client][:allowed_hosts])).uniq.join(",")
   })
   notifies :restart, "service[nrpe]", :delayed
 end
