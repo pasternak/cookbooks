@@ -81,6 +81,7 @@ search(:node, 'recipes:icinga2\:\:client').each do |box|
     variables({
       :box => box
     })
+    mode 0644
     notifies :reload, "service[icinga2]", :delayed
     not_if { box[:fqdn].empty? }
   end
