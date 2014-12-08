@@ -71,6 +71,7 @@ search(:node, 'recipes:icinga2\:\:client').each do |box|
         :name => box[:icinga2][:client][:host_group][:short],
         :desc => box[:icinga2][:client][:host_group][:desc]
       })
+      mode 0644
       notifies :reload, "service[icinga2]", :delayed
     end
 
