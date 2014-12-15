@@ -118,6 +118,7 @@ ruby_block ":: Clearing not used boxes..." do
       ::FileUtils.rm(file) if search(:node, "fqdn:#{::File.basename(file, '.conf')}").empty?
     end
   end
+  notifies :reload, "service[icinga2]", :delayed
 end
 
 # Finally, start icinga2 service
